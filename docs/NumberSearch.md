@@ -44,9 +44,9 @@ The queried number in E.164 format.
 
 The name associated with the number from the service (company, person, etc.).
 
-### Business category (`bizcate`)
+### Business category
 
-Identifies the type of business or entity associated with a number. The string is the API value; map to a display label in your UI as needed.
+Identifies the type of business or entity associated with a number. Machine-readable category code; map to a display label in your UI as needed.
 
 | Value | Display Name |
 |-------|--------------|
@@ -75,9 +75,9 @@ Identifies the type of business or entity associated with a number. The string i
 
 The service may return values not listed here or legacy codes; treat the response as authoritative.
 
-### Spam category (`spam`)
+### Spam category
 
-Identifies the type of spam associated with a number. The `spam` field carries the raw string from the API (typically the category value below).
+Identifies the type of spam associated with a number. Raw category string (typically one of the values below).
 
 | Value | Description |
 |-------|-------------|
@@ -94,9 +94,9 @@ Identifies the type of spam associated with a number. The `spam` field carries t
 
 The service may return values not listed here; treat the response as authoritative.
 
-### Spam severity (`spamlevel`)
+### Spam severity
 
-Integer from the number-search API.
+Integer severity level.
 
 | Value | Semantics |
 |-------|-----------|
@@ -110,9 +110,9 @@ Integer from the number-search API.
 |----------|------|-------------|
 | `e164` | `String` | The phone number in E.164 format. |
 | `name` | `String` | The name associated with the number (company name, personal name, etc.). |
-| `businessCategory` | `String` | Raw business category code from the number-search API (`bizcate`). See the type discussion above for common values and display labels. |
-| `spam` | `String` | Raw spam category string from the number-search API. See the type discussion above for common values. |
-| `spamLevel` | `Int` | Spam severity from the number-search API (`spamlevel`). See the type discussion above for value semantics. |
+| `businessCategory` | `String` | Raw business category code. See the type discussion above for common values and display labels. |
+| `spam` | `String` | Raw spam category string. See the type discussion above for common values. |
+| `spamLevel` | `Int` | Spam severity: **0** unlikely, **1** suspicious, **2** confirmed; see the type discussion above. |
 
 ## Capabilities and setup
 

@@ -36,15 +36,83 @@ Task {
 
 Information about a phone number returned by a number search.
 
+### Phone number (`e164`)
+
+The queried number in E.164 format.
+
+### Display name (`name`)
+
+The name associated with the number from the service (company, person, etc.).
+
+### Business category (`bizcate`)
+
+Identifies the type of business or entity associated with a number. The string is the API value; map to a display label in your UI as needed.
+
+| Value | Display Name |
+|-------|--------------|
+| `automobile` | Automobile |
+| `bank` | Financial |
+| `beauty` | Personal Care |
+| `professional` | Consultants |
+| `logistic` | Delivery |
+| `education` | Education |
+| `entertainment` | Entertainment |
+| `food` | Food |
+| `government` | Government |
+| `life` | Handy Services |
+| `health` | Health and Medical |
+| `media` | Media |
+| `organization` | Company / Organization |
+| `others` | Other |
+| `publicperson` | Performer or Public Figure |
+| `personal` | Personal |
+| `pet` | Pets |
+| `politics` | Political |
+| `shopping` | Shopping |
+| `activity` | Exhibitions |
+| `traffic` | Transportation |
+| `travel` | Travel |
+
+The service may return values not listed here or legacy codes; treat the response as authoritative.
+
+### Spam category (`spam`)
+
+Identifies the type of spam associated with a number. The `spam` field carries the raw string from the API (typically the category value below).
+
+| Value | Description |
+|-------|-------------|
+| `TOP` | Popular number |
+| `TELMARKETING` | Sales / Ads |
+| `CALLCENTER` | Customer Service |
+| `FRAUD` | Unwelcome |
+| `PHISHING` | Phishing |
+| `ADULT` | Adult Contents |
+| `ILLEGAL` | Illegal Threat |
+| `HARASSMENT` | Harassment |
+| `ONERING` | One-ring call |
+| `HFB` | Frequently Blocked |
+
+The service may return values not listed here; treat the response as authoritative.
+
+### Spam severity (`spamlevel`)
+
+Integer from the number-search API.
+
+| Value | Semantics |
+|-------|-----------|
+| 0 | Unlikely spam |
+| 1 | Suspicious spam |
+| 2 | Confirmed spam |
+
 ### Fields
 
 | Property | Type | Description |
 |----------|------|-------------|
 | `e164` | `String` | The phone number in E.164 format. |
 | `name` | `String` | The name associated with the number (company name, personal name, etc.). |
-| `businessCategory` | `String` | The business category of the number (e.g., restaurant, bank). |
-| `spam` | `String` | The spam label description. |
-| `spamLevel` | `Int` | The spam severity level. Higher values indicate greater spam likelihood. |
+| `businessCategory` | `String` | Raw business category code from the number-search API (`bizcate`). See the type discussion above for common values and display labels. |
+| `spam` | `String` | Raw spam category string from the number-search API. See the type discussion above for common values. |
+| `spamLevel` | `Int` | Spam severity from the number-search API (`spamlevel`). See the type discussion above for value semantics. |
 
 ## Capabilities and setup
 

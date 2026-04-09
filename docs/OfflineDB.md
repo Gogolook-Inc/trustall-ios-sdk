@@ -12,7 +12,7 @@ to enable offline caller identification.
 | `callDirectoryIsEnabled() async throws -> Bool` | Checks whether the Offline Database Call Directory extension is enabled. |
 | `downloadOfflineDatabaseIfOutdated() async throws` | Downloads or updates the offline database if the current version is outdated. |
 | `beginRequest(with context: CXCallDirectoryExtensionContext)` | Handles the Call Directory extension's request to load offline database entries. |
-| `deleteLocalData() throws` | Deletes all locally stored offline database data. |
+| `deleteLocalData() async throws` | Deletes all locally stored offline database data. |
 | `reloadDirectoryExtension() async throws` | Reloads the Call Directory extension to apply database changes. |
 
 ### Download/Update Database
@@ -63,7 +63,7 @@ Task {
 let trustall = Trustall()
 
 do {
-    try trustall.offlineDB.deleteLocalData()
+    try await trustall.offlineDB.deleteLocalData()
     print("Local data deleted")
 } catch {
     print("Delete failed: \(error)")
@@ -116,4 +116,22 @@ Errors that can occur during offline database operations.
 | Error | Description |
 |-------|-------------|
 | `callDirectoryExtensionDisabled` | The Call Directory extension is not enabled in Settings. |
+| `offlineDatabaseNotFound` | No offline database file found locally. |
+| `reloadFailed` | The Call Directory extension reload failed. |
+
+### reloadFailed
+
+Possible underlying CallKit error codes:
+
+| Code | Name | Description |
+|------|------|-------------|
+| 0 | unknown | An unknown Call Directory error occurred. |
+| 1 | noExtensionFound | No Call Directory extension found. |
+| 2 | loadingInterrupted | The Call Directory extension loading was interrupted. |
+| 3 | entriesOutOfOrder | The Call Directory entries are out of order. |
+| 4 | duplicateEntries | There are duplicate entries in the Call Directory. |
+| 5 | maximumEntriesExceeded | There are too many entries in the Call Directory. |
+| 6 | extensionDisabled | The Call Directory extension is not enabled. Please enable it in Settings. |
+| 7 | currentlyLoading | The Call Directory extension is currently loading. Please try again later. |
+| 8 | unexpectedIncrementalRemoval | An unexpected incremental removal occurred. |
 

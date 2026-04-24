@@ -2,6 +2,12 @@
 
 Scans URLs visited in Safari and sends warning notifications for dangerous websites.
 
+## Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `notificationURLKey` | `String` | The key used in notification `userInfo` to store the scanned URL string. |
+
 ## API
 
 | Method | Description |
@@ -62,9 +68,9 @@ This feature integrates through a **Safari Web Extension**. Configure the extens
 >
 > The manifests, JavaScript, and plist snippets in this guide are **examples only**. Follow Apple’s current documentation and the capabilities of your target **iOS version and extension types**; after upgrading Xcode or iOS, **re-test** your integration.
 >
-> **Baseline used alongside the main README:** This guide was written with **Xcode 16.2** in mind (see [Xcode 16.2 Release Notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-16_2-release-notes)). That Xcode release includes the **iOS 18.2 SDK** (stated in the same release notes). That is the **SDK / toolchain** pairing used for validation—not the same thing as the app’s **minimum deployment target** (for example, iOS 16.0+ in the README).
+> **Baseline used alongside the main README:** Validate this guide against the same **Xcode / iOS SDK** baseline used to produce the current prebuilt XCFramework release. Keep that **SDK / toolchain** baseline separate from the app’s **minimum deployment target** (for example, `iOS 16.0+` in the README).
 >
-> **Safari in this document means iOS Safari** (Safari on iPhone and iPad), **not** the macOS desktop Safari app. Use a device or simulator running **iOS 18.2** (or the iOS version your team validates against) to verify Web Extension behavior; record the **exact iOS build and device model** you used for QA. Xcode itself may run on macOS; keep that **build machine** context separate from the **end-user Safari** context, which here is **iOS Safari**.
+> **Safari in this document means iOS Safari** (Safari on iPhone and iPad), **not** the macOS desktop Safari app. Use a device or simulator running the **iOS version your team validates for the current release baseline** to verify Web Extension behavior; record the **exact iOS build and device model** you used for QA. Xcode itself may run on macOS; keep that **build machine** context separate from the **end-user Safari** context, which here is **iOS Safari**.
 
 ## Safari Web Extension Setup Guide
 

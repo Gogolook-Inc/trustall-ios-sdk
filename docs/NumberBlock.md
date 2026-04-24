@@ -1,6 +1,6 @@
 # Number Block
 
-Manages personal call blocking by allowing users to block and unblock specific phone numbers.
+Manages number blocking by allowing users to block and unblock specific phone numbers.
 
 ## API
 
@@ -79,7 +79,7 @@ Task {
 }
 ```
 
-### Load Personal Blocking List in Call Directory Extension
+### Load Number Block List in Call Directory Extension
 
 #### Parameters (`beginRequest`)
 

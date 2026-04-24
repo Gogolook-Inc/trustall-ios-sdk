@@ -5,12 +5,19 @@ Manages the offline number database for caller identification without network co
 Download the database in the main app, then load it in a Call Directory Extension
 to enable offline caller identification.
 
+## Properties
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `isTopSpamBlockingEnabled` | `Bool` | Indicates whether top spam numbers are configured to be blocked when loading the offline database. |
+
 ## API
 
 | Method | Description |
 |--------|-------------|
 | `callDirectoryIsEnabled() async throws -> Bool` | Checks whether the Offline Database Call Directory extension is enabled. |
 | `downloadOfflineDatabaseIfOutdated() async throws` | Downloads or updates the offline database if the current version is outdated. |
+| `setTopSpamBlockingEnabled(_ enabled: Bool) async throws` | Updates whether top spam numbers from the offline database should be blocked, then reloads the Call Directory extension. |
 | `beginRequest(with context: CXCallDirectoryExtensionContext)` | Handles the Call Directory extension's request to load offline database entries. |
 | `deleteLocalData() async throws` | Deletes all locally stored offline database data. |
 | `reloadDirectoryExtension() async throws` | Reloads the Call Directory extension to apply database changes. |
@@ -48,6 +55,14 @@ Task {
 ```
 
 ### Load Database in Call Directory Extension
+
+#### Parameters (`setTopSpamBlockingEnabled`)
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `enabled` | `Bool` | Yes | `true` to block top spam numbers, `false` to stop blocking them. |
+
+*The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
 
 #### Parameters (`beginRequest`)
 

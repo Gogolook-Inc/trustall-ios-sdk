@@ -16,7 +16,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 | Item | Minimum Version |
 |------|-----------------|
 | iOS | 16.0+ |
-| Xcode | 16.2+ |
+| Xcode | 26.0+ |
 
 ---
 
@@ -34,7 +34,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 ```swift
 // Add TrustallSDK to dependencies
 dependencies: [
-    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "1.0.0"))
+    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "1.1.0"))
 ]
 
 // Add to target dependencies
@@ -61,7 +61,7 @@ the **Sample plist** section in the package README).
 | `APP_GROUP_ID` | String | Always | App Group ID shared by the main app and extensions |
 | `LICENSE_ID` | String | Always | License from Gogolook |
 | `OFFLINE_DB_EXTENSION_BUNDLE_ID` | String | Conditionally required | Offline DB Call Directory extension; **required if you use offline DB** |
-| `NUMBER_BLOCK_EXTENSION_BUNDLE_ID` | String | Conditionally required | Number Block Call Directory extension; **required if you use personal blocking** |
+| `NUMBER_BLOCK_EXTENSION_BUNDLE_ID` | String | Conditionally required | Number Block Call Directory extension; **required if you use number blocking** |
 | `NUMBER_IDENTIFICATION_EXTENSION_BUNDLE_ID` | String | Conditionally required | Call Directory number identification; **required when that feature is enabled** |
 
 ### Sample plist

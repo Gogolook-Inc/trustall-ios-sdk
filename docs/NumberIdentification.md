@@ -1,6 +1,6 @@
 # Number Identification
 
-Manages personal caller identification by storing queried number information locally for display during incoming calls.
+Manages number identification by storing queried number information locally for display during incoming calls.
 
 ## API
 
@@ -8,8 +8,8 @@ Manages personal caller identification by storing queried number information loc
 |--------|-------------|
 | `identifiedNumbers() async throws -> [String]` | Returns the list of currently identified phone numbers. |
 | `callDirectoryIsEnabled() async throws -> Bool` | Checks whether the Number Identification Call Directory extension is enabled. |
-| `addNumber(numberInfo: NumberInfo) async throws` | Adds a number to the personal identification list. |
-| `removeNumber(_ e164: CXCallDirectoryPhoneNumber) async throws` | Removes a number from the personal identification list. |
+| `addNumber(numberInfo: NumberInfo) async throws` | Adds a number to the number identification list. |
+| `removeNumber(_ e164: CXCallDirectoryPhoneNumber) async throws` | Removes a number from the number identification list. |
 | `beginRequest(with context: CXCallDirectoryExtensionContext)` | Handles the Call Directory extension's request to load the identification list. |
 
 ### List identified phone numbers

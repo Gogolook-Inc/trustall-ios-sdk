@@ -1,15 +1,15 @@
-# SMS Filter
+# Message Filter
 
-Provides SMS filtering capabilities to detect and categorize spam messages.
+Provides Message Filter capabilities to detect and categorize spam messages.
 
 ## API
 
 | Method | Description |
 |--------|-------------|
 | `handle(_ capabilitiesQueryRequest: ILMessageFilterCapabilitiesQueryRequest, context: ILMessageFilterExtensionContext, completion: @escaping (ILMessageFilterCapabilitiesQueryResponse) -> Void)` | Handles the Message Filter extension **capabilities** query. |
-| `handle(_ queryRequest: ILMessageFilterQueryRequest, context: ILMessageFilterExtensionContext, completion: @escaping (ILMessageFilterQueryResponse) -> Void)` | Handles the **message filter** query for classifying an incoming SMS (not the capabilities query API). |
-| `enable() async throws` | Enables SMS filtering by downloading and applying the latest filter rules. |
-| `disable() async throws` | Disables SMS filtering by removing locally stored filter rules. |
+| `handle(_ queryRequest: ILMessageFilterQueryRequest, context: ILMessageFilterExtensionContext, completion: @escaping (ILMessageFilterQueryResponse) -> Void)` | Handles the **message filter** query for classifying an incoming message.(not the capabilities query API) |
+| `enable() async throws` | Enables Message Filter support by downloading and applying the latest filter rules. |
+| `disable() async throws` | Disables Message Filter support by removing locally stored filter rules. |
 | `lastFetchDate() throws -> Date?` | Returns the date when filter rules were last downloaded. |
 
 ### Message Filter capabilities query
@@ -24,27 +24,27 @@ Provides SMS filtering capabilities to detect and categorize spam messages.
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
 
-### Classify incoming SMS (Message Filter extension)
+### Classify incoming messages (MessageFilter extension)
 
 #### Parameters (`handle`)
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `queryRequest` | `ILMessageFilterQueryRequest` | Yes | The `ILMessageFilterQueryRequest` for this SMS. |
+| `queryRequest` | `ILMessageFilterQueryRequest` | Yes | The `ILMessageFilterQueryRequest` for this incoming message. |
 | `context` | `ILMessageFilterExtensionContext` | Yes | The Message Filter extension context. |
 | `completion` | `@escaping (ILMessageFilterQueryResponse) -> Void` | Yes | Completion handler; invoke with `ILMessageFilterQueryResponse` when classification is done. |
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
 
-### Enable/Disable SMS Filtering
+### Enable/Disable MessageFilter
 
 ```swift
 let trustall = Trustall()
 
 Task {
     do {
-        try await trustall.smsFilter.enable()
-        print("SMS filtering enabled")
+        try await trustall.messageFilter.enable()
+        print("Message Filter enabled")
     } catch {
         print("Enable failed: \(error)")
     }
@@ -56,8 +56,8 @@ let trustall = Trustall()
 
 Task {
     do {
-        try await trustall.smsFilter.disable()
-        print("SMS filtering disabled")
+        try await trustall.messageFilter.disable()
+        print("Message Filter disabled")
     } catch {
         print("Disable failed: \(error)")
     }
@@ -73,7 +73,7 @@ The last fetch date, or `nil` if rules have not been fetched yet.
 ```swift
 let trustall = Trustall()
 
-if let lastFetchDate = try trustall.smsFilter.lastFetchDate() {
+if let lastFetchDate = try trustall.messageFilter.lastFetchDate() {
     print("Filter rules last updated: \(lastFetchDate)")
 } else {
     print("Filter rules not yet fetched")
@@ -104,7 +104,7 @@ extension MessageFilterExtension: ILMessageFilterQueryHandling {
     func handle(_ queryRequest: ILMessageFilterQueryRequest,
                 context: ILMessageFilterExtensionContext,
                 completion: @escaping (ILMessageFilterQueryResponse) -> Void) {
-        trustall.smsFilter.handle(queryRequest, context: context, completion: completion)
+        trustall.messageFilter.handle(queryRequest, context: context, completion: completion)
     }
 }
 
@@ -112,7 +112,7 @@ extension MessageFilterExtension: ILMessageFilterCapabilitiesQueryHandling {
     func handle(_ capabilitiesQueryRequest: ILMessageFilterCapabilitiesQueryRequest,
                 context: ILMessageFilterExtensionContext,
                 completion: @escaping (ILMessageFilterCapabilitiesQueryResponse) -> Void) {
-        trustall.smsFilter.handle(capabilitiesQueryRequest, context: context, completion: completion)
+        trustall.messageFilter.handle(capabilitiesQueryRequest, context: context, completion: completion)
     }
 }
 ```

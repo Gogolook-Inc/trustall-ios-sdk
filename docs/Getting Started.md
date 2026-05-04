@@ -34,7 +34,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 ```swift
 // Add TrustallSDK to dependencies
 dependencies: [
-    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "1.1.0"))
+    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "1.1.1"))
 ]
 
 // Add to target dependencies

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "TrustallSDK"
-  s.version      = "1.1.2"
+  s.version      = "1.1.3"
   s.summary      = "TrustallSDK"
   s.description  = "TrustallSDK iOS SDK"
   s.homepage     = "https://www.gogolook.com/"
@@ -11,18 +11,18 @@ Pod::Spec.new do |s|
   s.swift_version = '5.9'
 
   s.source = { 
-    :http => 'https://github.com/Gogolook-Inc/trustall-ios-sdk/releases/download/1.1.2/TrustallSDK.xcframework.zip',
-    :sha256 => '7ff3c457ae4511aa9acacb243e9fe0ccdf14fa9f48158d6aaeecd190337abfd1'
+    :http => 'https://github.com/Gogolook-Inc/trustall-ios-sdk/releases/download/1.1.3/TrustallSDK.xcframework.zip',
+    :sha256 => 'bb835694606194d9b8083ce3888c9a97f8bf4a26b6384e933425265879048be2'
   }
 
   s.vendored_frameworks = 'TrustallSDK.xcframework'
 
   s.prepare_command = <<-CMD
     # Download the XCFramework
-    curl -L -o TrustallSDK.xcframework.zip 'https://github.com/Gogolook-Inc/trustall-ios-sdk/releases/download/1.1.2/TrustallSDK.xcframework.zip'
+    curl -L -o TrustallSDK.xcframework.zip 'https://github.com/Gogolook-Inc/trustall-ios-sdk/releases/download/1.1.3/TrustallSDK.xcframework.zip'
     
     # Verify checksum
-    echo "7ff3c457ae4511aa9acacb243e9fe0ccdf14fa9f48158d6aaeecd190337abfd1  TrustallSDK.xcframework.zip" | shasum -a 256 -c || exit 1
+    echo "bb835694606194d9b8083ce3888c9a97f8bf4a26b6384e933425265879048be2  TrustallSDK.xcframework.zip" | shasum -a 256 -c || exit 1
     
     # Extract the XCFramework
     unzip -o TrustallSDK.xcframework.zip

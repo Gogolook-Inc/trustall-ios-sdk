@@ -19,8 +19,8 @@ let package = Package(
         ),
         .binaryTarget(
             name: "TrustallSDK",
-            url: "https://github.com/Gogolook-Inc/trustall-ios-sdk/releases/download/1.1.2/TrustallSDK.xcframework.zip",
-            checksum: "7ff3c457ae4511aa9acacb243e9fe0ccdf14fa9f48158d6aaeecd190337abfd1"
+            url: "https://github.com/Gogolook-Inc/trustall-ios-sdk/releases/download/1.1.3/TrustallSDK.xcframework.zip",
+            checksum: "bb835694606194d9b8083ce3888c9a97f8bf4a26b6384e933425265879048be2"
         ),
     ]
 )

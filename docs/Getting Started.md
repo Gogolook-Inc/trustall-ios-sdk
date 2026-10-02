@@ -7,6 +7,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [SDK Initialization](#sdk-initialization)
+- [Data Structures](#data-structures)
 - [Error Handling](#error-handling)
 
 ---
@@ -34,7 +35,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 ```swift
 // Add TrustallSDK to dependencies
 dependencies: [
-    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "1.1.9"))
+    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.0"))
 ]
 
 // Add to target dependencies
@@ -63,6 +64,20 @@ the **Sample plist** section in the package README).
 | `OFFLINE_DB_EXTENSION_BUNDLE_ID` | String | Conditionally required | Offline DB Call Directory extension; **required if you use offline DB** |
 | `NUMBER_BLOCK_EXTENSION_BUNDLE_ID` | String | Conditionally required | Number Block Call Directory extension; **required if you use number blocking** |
 | `NUMBER_IDENTIFICATION_EXTENSION_BUNDLE_ID` | String | Conditionally required | Call Directory number identification; **required when that feature is enabled** |
+| `LOG_LEVEL` | Int | Optional | SDK-internal log verbosity: `0`=off (default), `1`=error, `2`=warning, `3`=info |
+
+`LOG_LEVEL` is a threshold, not an exact filter: each level also includes every level
+listed before it. `2` (warning) shows both warnings and errors; `3` (info) shows
+everything.
+
+- `error`: an SDK operation did not complete — the caller receives a thrown error.
+- `warning`: the SDK hit a condition worth a second look, whether or not the request
+  the caller made still went through (e.g. a request was rejected and had to be
+  retried, unexpectedly-shaped data came back from the server, or the configured
+  license ID changed since the last launch).
+- `info`: normal, expected SDK activity (e.g. a cached credential expired and was
+  refreshed automatically). Useful while actively debugging an integration; too noisy
+  to leave on otherwise.
 
 ### Sample plist
 
@@ -134,6 +149,176 @@ try Trustall.configure(options)
 ### Initialization errors
 
 `Trustall.Options.Error` only defines `missingPlistURL` (nil URL passed into `Options.init`). In practice, `Data(contentsOf:)` can throw **file system errors**, and `PropertyListDecoder` can throw **`DecodingError`** when the plist is **not a valid property list**, a **required** key is **missing**, or a **value’s type does not match** the expected decoding shape. **Conditionally required** keys (such as the Call Directory extension bundle IDs) **may be omitted** from the plist when you do not use those features—omitting them does not by itself cause a “missing key” decode failure. `Trustall.configure()` surfaces these errors as `Error`. Use a broad `catch`; do not assume you will only see `Trustall.Options.Error`.
+
+---
+
+## Data Structures
+
+### NumberInfo.BusinessCategory
+
+Identifies the type of business or entity associated with a number.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `automobile` | `NumberInfo.BusinessCategory` |  |
+| `bank` | `NumberInfo.BusinessCategory` |  |
+| `beauty` | `NumberInfo.BusinessCategory` |  |
+| `professional` | `NumberInfo.BusinessCategory` |  |
+| `logistic` | `NumberInfo.BusinessCategory` |  |
+| `education` | `NumberInfo.BusinessCategory` |  |
+| `entertainment` | `NumberInfo.BusinessCategory` |  |
+| `food` | `NumberInfo.BusinessCategory` |  |
+| `government` | `NumberInfo.BusinessCategory` |  |
+| `life` | `NumberInfo.BusinessCategory` |  |
+| `health` | `NumberInfo.BusinessCategory` |  |
+| `media` | `NumberInfo.BusinessCategory` |  |
+| `organization` | `NumberInfo.BusinessCategory` |  |
+| `others` | `NumberInfo.BusinessCategory` |  |
+| `publicPerson` | `NumberInfo.BusinessCategory` |  |
+| `personal` | `NumberInfo.BusinessCategory` |  |
+| `pet` | `NumberInfo.BusinessCategory` |  |
+| `politics` | `NumberInfo.BusinessCategory` |  |
+| `shopping` | `NumberInfo.BusinessCategory` |  |
+| `activity` | `NumberInfo.BusinessCategory` |  |
+| `traffic` | `NumberInfo.BusinessCategory` |  |
+| `travel` | `NumberInfo.BusinessCategory` |  |
+| `rawValue` | `String` | The raw string value of the business category. |
+
+#### Values
+
+| Value | Description |
+|-------|-------------|
+| `.automobile` |  |
+| `.bank` |  |
+| `.beauty` |  |
+| `.professional` |  |
+| `.logistic` |  |
+| `.education` |  |
+| `.entertainment` |  |
+| `.food` |  |
+| `.government` |  |
+| `.life` |  |
+| `.health` |  |
+| `.media` |  |
+| `.organization` |  |
+| `.others` |  |
+| `.publicPerson` |  |
+| `.personal` |  |
+| `.pet` |  |
+| `.politics` |  |
+| `.shopping` |  |
+| `.activity` |  |
+| `.traffic` |  |
+| `.travel` |  |
+
+### NumberInfo.SpamCategory
+
+Identifies the type of spam associated with a number.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `top` | `NumberInfo.SpamCategory` |  |
+| `telMarketing` | `NumberInfo.SpamCategory` |  |
+| `callCenter` | `NumberInfo.SpamCategory` |  |
+| `fraud` | `NumberInfo.SpamCategory` |  |
+| `phishing` | `NumberInfo.SpamCategory` |  |
+| `adult` | `NumberInfo.SpamCategory` |  |
+| `illegal` | `NumberInfo.SpamCategory` |  |
+| `harassment` | `NumberInfo.SpamCategory` |  |
+| `oneRing` | `NumberInfo.SpamCategory` |  |
+| `hfb` | `NumberInfo.SpamCategory` |  |
+| `rawValue` | `String` | The raw string value of the spam category. |
+
+#### Values
+
+| Value | Description |
+|-------|-------------|
+| `.top` |  |
+| `.telMarketing` |  |
+| `.callCenter` |  |
+| `.fraud` |  |
+| `.phishing` |  |
+| `.adult` |  |
+| `.illegal` |  |
+| `.harassment` |  |
+| `.oneRing` |  |
+| `.hfb` |  |
+
+### NumberInfo.SpamLevel
+
+Spam severity level.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `unlikely` | `NumberInfo.SpamLevel` | Unlikely to be spam. |
+| `suspicious` | `NumberInfo.SpamLevel` | Suspicious spam. |
+| `confirmed` | `NumberInfo.SpamLevel` | Confirmed spam. |
+| `rawValue` | `Int` | The raw integer value of the spam severity. |
+
+#### Values
+
+| Value | Description |
+|-------|-------------|
+| `.unlikely` | Unlikely to be spam. |
+| `.suspicious` | Suspicious spam. |
+| `.confirmed` | Confirmed spam. |
+
+### NumberSearch.SearchFailure
+
+A lookup with no successful result and at least one failed provider. `failures` is nonempty and ordered by attempt; normal notFound and cancellation are excluded.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `failures` | `[NumberSearch.ProviderFailure]` |  |
+
+### NumberSearch.ProviderFailure
+
+A provider's original failure. The index refers to the lookup's configuration snapshot.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `providerIndex` | `Int` |  |
+| `providerName` | `String` | For human diagnostics, not a stable machine identifier. |
+| `underlyingError` | `any Error` |  |
+
+### TrustallNumberSearchProvider
+
+Trustall's own number search source, backed by its network service.
+
+### RemoteConfidenceLevelProvider
+
+Trustall's own URL scan source, backed by its network service.
+
+### URLScan.ScanFailure
+
+A scan with no answer and at least one failed source. Failures are nonempty and ordered by attempt; normal `.unknown`, cache-read failures and cancellation are excluded.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `failures` | `[URLScan.ProviderFailure]` |  |
+
+### URLScan.ProviderFailure
+
+A source's original error and its zero-based index in this scan's configuration snapshot.
+
+#### Fields
+
+| Property | Type | Description |
+|----------|------|-------------|
+| `providerIndex` | `Int` |  |
+| `underlyingError` | `any Error` |  |
 
 ---
 

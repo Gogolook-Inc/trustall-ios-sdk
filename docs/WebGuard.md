@@ -2,6 +2,12 @@
 
 Scans URLs visited in Safari and sends warning notifications for dangerous websites.
 
+WebGuard checks URLs with the same sources as ``URLScan``. It has no source list of its own:
+to use your own sources, call `Trustall.URLScan.setProviders(_:)` inside the Safari Web
+Extension, because the extension is a separate process from your app. If the extension never
+calls it, WebGuard uses Trustall's own service there, even when your app has set its own
+sources. See `ConfidenceLevelProviding` in the URL Scan documentation for how to write one.
+
 ## Properties
 
 | Property | Type | Description |
@@ -38,6 +44,8 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
     override init() {
         do {
             try Trustall.configure()
+            // Only if you supply your own sources; see ConfidenceLevelProviding.
+            try Trustall.URLScan.setProviders([MyProvider(), .trustall])
         } catch {
             print("SDK initialization failed: \(error)")
         }

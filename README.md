@@ -35,7 +35,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 ```swift
 // Add TrustallSDK to dependencies
 dependencies: [
-    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.0"))
+    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.1"))
 ]
 
 // Add to target dependencies
@@ -146,9 +146,43 @@ try Trustall.configure(options)
 
 > **Important:** The SDK must be initialized in **both** the main app and any extensions that use TrustallSDK. Each process loads its own bundle and needs its own `configure`.
 
+### setDeviceID
+
+`Trustall.setDeviceID(_ deviceID: String) throws`
+
+Sets the ID the SDK uses to identify this device, replacing the one it generated itself.
+
+Call this after `configure()`. The ID is stored in the App Group container, so the main app
+and its extensions all use it. It is stored exactly as given.
+
+Changing the ID signs the SDK out: the next request authenticates again with the new ID.
+Passing the ID that is already set changes nothing, so it is safe to call on every launch.
+
+
+#### Parameters (`setDeviceID`)
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `deviceID` | `String` | Yes | The ID to use. Must contain at least one non-whitespace character. |
+
+*The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
+```swift
+try Trustall.configure()
+try Trustall.setDeviceID(myAppUserDeviceID)
+```
+
+**Throws:** ``Error/emptyDeviceID`` if `deviceID` is empty or only whitespace. Nothing is changed in that case.
+
 ### Initialization errors
 
 `Trustall.Options.Error` only defines `missingPlistURL` (nil URL passed into `Options.init`). In practice, `Data(contentsOf:)` can throw **file system errors**, and `PropertyListDecoder` can throw **`DecodingError`** when the plist is **not a valid property list**, a **required** key is **missing**, or a **value’s type does not match** the expected decoding shape. **Conditionally required** keys (such as the Call Directory extension bundle IDs) **may be omitted** from the plist when you do not use those features—omitting them does not by itself cause a “missing key” decode failure. `Trustall.configure()` surfaces these errors as `Error`. Use a broad `catch`; do not assume you will only see `Trustall.Options.Error`.
+
+`Trustall.Error` is thrown by the setup methods above:
+
+| Error | Description |
+|-------|-------------|
+| `emptyDeviceID` | `setDeviceID(_:)` was called with an empty or whitespace-only ID. |
 
 ---
 

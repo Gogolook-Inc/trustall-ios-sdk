@@ -43,6 +43,11 @@ Task {
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
 
+**Throws (`blockNumber`):**
+
+- `NumberBlock.Error.invalidNumber` if the number format is invalid.
+- `NumberBlock.Error.callDirectoryExtensionDisabled` if the extension is not enabled.
+
 ```swift
 let trustall = Trustall()
 
@@ -65,6 +70,11 @@ Task {
 | `number` | `String` | Yes | The phone number to unblock. |
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
+**Throws (`unblockNumber`):**
+
+- `NumberBlock.Error.invalidNumber` if the number format is invalid.
+- `NumberBlock.Error.callDirectoryExtensionDisabled` if the extension is not enabled.
 
 ```swift
 let trustall = Trustall()

@@ -22,6 +22,14 @@ sources. See `ConfidenceLevelProviding` in the URL Scan documentation for how to
 
 ### Handle Requests in Safari Web Extension
 
+**Details (`beginRequest`):**
+
+Scans the URL from the extension context and sends a local notification
+if the URL is dangerous. A scan failure is logged once and completes the request without
+sending a notification; explicit cancellation completes silently. Neither is cached.
+A failure to post the notification is logged once and completes the request; the scan
+result it warns about is already cached.
+
 #### Parameters (`beginRequest`)
 
 | Parameter | Type | Required | Description |
@@ -70,7 +78,6 @@ class SafariWebExtensionHandler: NSObject, NSExtensionRequestHandling {
 This feature integrates through a **Safari Web Extension**. Configure the extension target, entitlements, and host app relationship per Apple’s current guidance.
 
 - [Safari Services](https://developer.apple.com/documentation/safariservices)
-
 
 > **Disclaimer and verification environment**
 >

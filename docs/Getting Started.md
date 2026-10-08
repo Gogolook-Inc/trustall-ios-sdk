@@ -35,7 +35,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 ```swift
 // Add TrustallSDK to dependencies
 dependencies: [
-    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.1"))
+    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.2"))
 ]
 
 // Add to target dependencies
@@ -158,7 +158,6 @@ and its extensions all use it. It is stored exactly as given.
 Changing the ID signs the SDK out: the next request authenticates again with the new ID.
 Passing the ID that is already set changes nothing, so it is safe to call on every launch.
 
-
 #### Parameters (`setDeviceID`)
 
 | Parameter | Type | Required | Description |
@@ -167,12 +166,12 @@ Passing the ID that is already set changes nothing, so it is safe to call on eve
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
 
+**Throws (`setDeviceID`):** ``Error/emptyDeviceID`` if `deviceID` is empty or only whitespace. Nothing is changed in that case.
+
 ```swift
 try Trustall.configure()
 try Trustall.setDeviceID(myAppUserDeviceID)
 ```
-
-**Throws:** ``Error/emptyDeviceID`` if `deviceID` is empty or only whitespace. Nothing is changed in that case.
 
 ### Initialization errors
 
@@ -311,7 +310,7 @@ A lookup with no successful result and at least one failed provider. `failures` 
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `failures` | `[NumberSearch.ProviderFailure]` |  |
+| `failures` | `[NumberSearch.ProviderFailure]` | Each failed provider, in the order it was tried. |
 
 ### NumberSearch.ProviderFailure
 
@@ -321,9 +320,9 @@ A provider's original failure. The index refers to the lookup's configuration sn
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `providerIndex` | `Int` |  |
+| `providerIndex` | `Int` | The provider's zero-based position in the configured provider list. |
 | `providerName` | `String` | For human diagnostics, not a stable machine identifier. |
-| `underlyingError` | `any Error` |  |
+| `underlyingError` | `any Error` | The error the provider threw. |
 
 ### TrustallNumberSearchProvider
 
@@ -341,7 +340,7 @@ A scan with no answer and at least one failed source. Failures are nonempty and 
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `failures` | `[URLScan.ProviderFailure]` |  |
+| `failures` | `[URLScan.ProviderFailure]` | Each failed source, in the order it was tried. |
 
 ### URLScan.ProviderFailure
 
@@ -351,8 +350,8 @@ A source's original error and its zero-based index in this scan's configuration 
 
 | Property | Type | Description |
 |----------|------|-------------|
-| `providerIndex` | `Int` |  |
-| `underlyingError` | `any Error` |  |
+| `providerIndex` | `Int` | The source's zero-based position in the list passed to ``URLScan/setProviders(_:)``. |
+| `underlyingError` | `any Error` | The error the source threw. |
 
 ---
 

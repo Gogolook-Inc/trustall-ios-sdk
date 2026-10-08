@@ -23,7 +23,7 @@ to enable offline caller identification.
 | `deleteLocalData() async throws` | Deletes all locally stored offline database data. |
 | `reloadDirectoryExtension() async throws` | Reloads the Call Directory extension to apply database changes. |
 
-### Download/Update Database
+### Offline DB Call Directory extension status
 
 #### Return Value (`callDirectoryIsEnabled`)
 
@@ -42,6 +42,10 @@ Task {
 }
 ```
 
+### Download/Update Database
+
+**Throws (`downloadOfflineDatabaseIfOutdated`):** `OfflineDB.Error.callDirectoryExtensionDisabled` if the extension is not enabled.
+
 ```swift
 let trustall = Trustall()
 
@@ -55,7 +59,17 @@ Task {
 }
 ```
 
-### Load Database in Call Directory Extension
+### Top Spam Blocking
+
+**Details (`setTopSpamBlockingEnabled`):**
+
+Turning this setting on requires the Call Directory extension to be enabled and the local offline database
+to exist. Turning it off does not require the extension to be enabled; if the extension is disabled, the
+preference is still saved and applied later when the extension is re-enabled.
+
+- Note: This writes the same persisted preference as
+  ``CustomOfflineDB/setAutomaticBlockingEnabled(_:)``, and additionally tells the built-in
+  Call Directory handler which entry set to load.
 
 #### Parameters (`setTopSpamBlockingEnabled`)
 
@@ -64,6 +78,23 @@ Task {
 | `enabled` | `Bool` | Yes | `true` to block top spam numbers, `false` to stop blocking them. |
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
+**Throws (`setTopSpamBlockingEnabled`):**
+
+- ``OfflineDB/Error/callDirectoryExtensionDisabled`` when turning on while the extension is disabled.
+- ``OfflineDB/Error/offlineDatabaseNotFound`` when turning on without a downloaded database.
+- ``OfflineDB/Error/reloadFailed(underlyingError:)`` when reloading fails for any other reason.
+
+### Load Database in Call Directory Extension
+
+**Details (`beginRequest`):**
+
+Call this method from your Call Directory Extension's `beginRequest(with:)` override.
+
+- Important: An extension serves one source. Call either this method or
+  ``CustomOfflineDB/beginRequest(with:provider:)`` for a given request — never both. Calling
+  both would feed two independent ascending sequences into one context and finish the
+  request twice, which CallKit rejects.
 
 #### Parameters (`beginRequest`)
 
@@ -85,6 +116,20 @@ do {
     print("Delete failed: \(error)")
 }
 ```
+
+### Apply Database Changes
+
+**Details (`reloadDirectoryExtension`):**
+
+This reloads the extension for Trustall's built-in offline database, so it requires that
+database to exist. A custom offline database source uses
+``CustomOfflineDB/reloadDirectoryExtension()`` instead, which has no such requirement.
+
+**Throws (`reloadDirectoryExtension`):**
+
+- ``OfflineDB/Error/callDirectoryExtensionDisabled`` when the extension is disabled.
+- ``OfflineDB/Error/offlineDatabaseNotFound`` when no database has been downloaded.
+- ``OfflineDB/Error/reloadFailed(underlyingError:)`` when the reload itself fails.
 
 ## Extension Integration
 
@@ -125,7 +170,6 @@ A caller-identification entry supplied to ``CustomOfflineDB`` by a ``CompleteOff
 Entries must be supplied in strictly increasing ``number`` order. Duplicate numbers are not
 accepted because CallKit requires each complete entry set to be ordered and unique.
 
-
 ### Fields
 
 | Property | Type | Description |
@@ -163,7 +207,6 @@ struct MyOfflineDBProvider: CompleteOfflineDBProviding {
     }
 }
 ```
-
 
 ### Requirements
 
@@ -206,7 +249,6 @@ try await trustall.offlineDB.custom.setAutomaticBlockingEnabled(false)
 trustall.offlineDB.custom.beginRequest(with: context, provider: MyOfflineDBProvider())
 ```
 
-
 ### Fields
 
 | Property | Type | Description |
@@ -228,7 +270,6 @@ Checks whether the Offline Database Call Directory extension is enabled.
 
 This is the same extension the built-in database uses; enabling it in Settings is a user
 action either way.
-
 
 #### Return Value (`callDirectoryIsEnabled`)
 
@@ -264,7 +305,6 @@ that database has been downloaded.
   ``OfflineDB/setTopSpamBlockingEnabled(_:)``. It does not touch the built-in database's own
   reload command, which a custom source never reads.
 
-
 #### Parameters (`setAutomaticBlockingEnabled`)
 
 | Parameter | Type | Required | Description |
@@ -272,6 +312,11 @@ that database has been downloaded.
 | `enabled` | `Bool` | Yes | `true` to apply automatic blocking, `false` to load identification only. |
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
+**Throws (`setAutomaticBlockingEnabled`):**
+
+- ``OfflineDB/Error/callDirectoryExtensionDisabled`` when turning on while the extension is disabled.
+- ``OfflineDB/Error/reloadFailed(underlyingError:)`` when reloading fails for any other reason.
 
 ```swift
 let trustall = Trustall()
@@ -292,6 +337,10 @@ Reloads the Call Directory extension so it asks your provider for entries again.
 Call this after the data behind your provider changes. Trustall's built-in offline database
 is never consulted, so this works whether or not that database has been downloaded.
 
+**Throws (`reloadDirectoryExtension`):**
+
+- ``OfflineDB/Error/callDirectoryExtensionDisabled`` when the extension is disabled.
+- ``OfflineDB/Error/reloadFailed(underlyingError:)`` when the reload itself fails.
 
 ```swift
 let trustall = Trustall()
@@ -322,7 +371,6 @@ while ``isAutomaticBlockingEnabled`` is enabled. Automatic blocking is enabled b
 - Parameters:
   - context: The extension context provided by CallKit.
   - provider: The single source of the complete, sorted caller information set.
-
 
 ```swift
 final class CallDirectoryHandler: CXCallDirectoryProvider {

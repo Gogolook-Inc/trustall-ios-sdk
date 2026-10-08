@@ -35,6 +35,10 @@ Task {
 
 ### Add number to identification list
 
+**Details (`addNumber`):**
+
+The number information will be displayed during incoming calls from this number.
+
 #### Parameters (`addNumber`)
 
 | Parameter | Type | Required | Description |
@@ -42,6 +46,8 @@ Task {
 | `numberInfo` | `NumberInfo` | Yes | The number information to add (for example from ``NumberSearch/searchNumber(e164:)``). |
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
+**Throws (`addNumber`):** `NumberIdentification.Error.invalidNumber` if the number format is invalid.
 
 ```swift
 let trustall = Trustall()
@@ -58,6 +64,14 @@ Task {
 ```
 
 ### Remove number from identification list
+
+#### Parameters (`removeNumber`)
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `e164` | `CXCallDirectoryPhoneNumber` | Yes | The phone number to remove as a `CXCallDirectoryPhoneNumber`. |
+
+*The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
 
 ```swift
 let trustall = Trustall()

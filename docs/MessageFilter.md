@@ -26,6 +26,10 @@ Provides Message Filter capabilities to detect and categorize spam messages.
 
 ### Classify incoming messages (MessageFilter extension)
 
+**Details (`handle`):**
+
+Classifies the incoming message as allow, junk, promotion, or transaction.
+
 #### Parameters (`handle`)
 
 | Parameter | Type | Required | Description |

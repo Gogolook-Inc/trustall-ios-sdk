@@ -14,6 +14,21 @@ By default only Trustall's own service (``TrustallNumberSearchProvider``) is use
 
 ### Usage Example
 
+**Details (`setProviders`):**
+
+The first source that returns data (``NumberInfo/isNotFound`` is `false`) stops the
+search; a source that has no data or throws an ordinary error is skipped in favor of the next one.
+Explicit cancellation immediately stops the search.
+
+This configuration belongs to the process, not to a `Trustall` instance, and is safe to
+call from any thread. Call it right after `Trustall.configure(_:)`.
+
+- Important: This must be called once in *every* process that looks numbers up. The SDK
+  only searches from the host app itself, but ``searchNumber(e164:)`` is public, and an app
+  extension that calls it runs in its own process and shares nothing with the app here. A
+  process that never calls this silently falls back to Trustall's own service, so a source
+  list meant to keep numbers away from Trustall would not hold there.
+
 #### Parameters (`setProviders`)
 
 | Parameter | Type | Required | Description |
@@ -21,6 +36,8 @@ By default only Trustall's own service (``TrustallNumberSearchProvider``) is use
 | `providers` | `[any NumberSearchProviding]` | Yes | The sources to try, in order. Must not be empty. |
 
 *The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
+**Throws (`setProviders`):** ``Error/emptyProviders`` if `providers` is empty. Nothing is written in that case — whatever was configured before stays.
 
 ```swift
 try Trustall.configure(options)
@@ -34,9 +51,19 @@ try Trustall.NumberSearch.setProviders([MyProvider()])
 
 ### Usage Example
 
+#### Parameters (`searchNumber`)
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `e164` | `String` | Yes | Phone number. Accepts multiple formats: `0912345678`, `886912345678`, or `+886912345678`. |
+
+*The **Required** column follows the Swift signature: `No` if a default value is present; `Optional` if the parameter type is optional (`?`); otherwise `Yes`.*
+
 #### Return Value (`searchNumber`)
 
 A ``NumberInfo`` with the number's name, business category, and spam information. If every source normally reports no data, the fields other than `e164` are empty (see ``NumberInfo/isNotFound``).
+
+**Throws (`searchNumber`):** ``SearchFailure`` if no source returns data and one or more sources fail. Original provider errors are retained in attempt order. `CancellationError` propagates immediately without trying another source or logging. Logging settings do not change this contract.
 
 ```swift
 let trustall = Trustall()
@@ -119,7 +146,6 @@ struct MyProvider: NumberSearchProviding {
     }
 }
 ```
-
 
 ### Values
 

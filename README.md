@@ -35,7 +35,7 @@ TrustallSDK is a powerful iOS SDK. The main entry point for TrustallSDK features
 ```swift
 // Add TrustallSDK to dependencies
 dependencies: [
-    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.2"))
+    .package(url: "https://github.com/Gogolook-Inc/trustall-ios-sdk", .upToNextMajor(from: "2.0.3"))
 ]
 
 // Add to target dependencies
@@ -65,6 +65,10 @@ the **Sample plist** section in the package README).
 | `NUMBER_BLOCK_EXTENSION_BUNDLE_ID` | String | Conditionally required | Number Block Call Directory extension; **required if you use number blocking** |
 | `NUMBER_IDENTIFICATION_EXTENSION_BUNDLE_ID` | String | Conditionally required | Call Directory number identification; **required when that feature is enabled** |
 | `LOG_LEVEL` | Int | Optional | SDK-internal log verbosity: `0`=off (default), `1`=error, `2`=warning, `3`=info |
+| `ENVIRONMENT` | Int | Optional | Server environment the SDK connects to: `0`=production (default), `1`=sandbox, `2`=staging |
+
+If `ENVIRONMENT` is missing, holds a non-integer value such as the string `"1"`, or holds
+a number not listed above, the SDK connects to production and does not report an error.
 
 `LOG_LEVEL` is a threshold, not an exact filter: each level also includes every level
 listed before it. `2` (warning) shows both warnings and errors; `3` (info) shows
